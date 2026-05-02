@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Un mensaje para ti</title>
+    <style>
+        :root {
+            --color-sobre: #f2acac;
+            --color-carta: #ffffff;
+            --color-fondo: #ffe4e1;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: var(--color-fondo);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+        }
+
+        /* Contenedor del sobre */
+        .envelope-wrapper {
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .envelope-wrapper:hover {
+            transform: scale(1.05);
+        }
+
+        .envelope {
+            position: relative;
+            width: 250px;
+            height: 150px;
+            background-color: var(--color-sobre);
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        /* La tapa del sobre */
+        .envelope::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            z-index: 2;
+            border-top: 80px solid #e69191;
+            border-left: 125px solid transparent;
+            border-right: 125px solid transparent;
+            transform-origin: top;
+            transition: transform 0.4s ease-in-out;
+        }
+
+        /* El interior del sobre */
+        .envelope::after {
+            content: "";
+            position: absolute;
+            z-index: 1;
+            border-top: 75px solid transparent;
+            border-left: 125px solid var(--color-sobre);
+            border-right: 125px solid var(--color-sobre);
+            border-bottom: 75px solid #d98686;
+            bottom: 0;
+        }
+
+        /* La carta oculta */
+        .letter {
+            position: absolute;
+            bottom: 0;
+            left: 10%;
+            width: 80%;
+            height: 80%;
+            background: var(--color-carta);
+            text-align: center;
+            padding: 15px;
+            box-sizing: border-box;
+            transition: transform 0.5s ease-in-out;
+            z-index: 0;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+        }
+
+        .letter p {
+            font-size: 14px;
+            color: #444;
+            margin: 0;
+        }
+
+        /* Estado Abierto */
+        .envelope-wrapper.open .envelope::before {
+            transform: rotateX(180deg);
+            z-index: 0;
+        }
+
+        .envelope-wrapper.open .letter {
+            transform: translateY(-100px);
+            z-index: 2;
+        }
+
+        /* Efecto de corazones flotantes */
+        .heart {
+            position: absolute;
+            color: #ff4b5c;
+            font-size: 20px;
+            user-select: none;
+            animation: fly 3s linear forwards;
+        }
+
+        @keyframes fly {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-300px) rotate(360deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="envelope-wrapper" id="envelope">
+        <div class="envelope">
+            <div class="letter">
+                <p><strong>hola bro</strong></p>
+                <p>te quiero bro</p>
+                <p>puto el que lo lea, dea </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const envelope = document.getElementById('envelope');
+
+        envelope.addEventListener('click', () => {
+            envelope.classList.toggle('open');
+            
+            // Crear corazones al abrir
+            if(envelope.classList.contains('open')) {
+                for(let i=0; i<15; i++) {
+                    setTimeout(createHeart, i * 100);
+                }
+            }
+        });
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.top = '80vh';
+            heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
+            document.body.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
